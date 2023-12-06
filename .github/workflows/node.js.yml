@@ -42,10 +42,15 @@ jobs:
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-      - name: Deploy wiht SSH
+      - name: Deploy with SSH
         run: |
-          timestamp=$(date +"%Y%m%d%H%M%S")
-          folder_name="deploy_$timestamp"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "mkdir ~/web/$folder_name"
-          scp -r -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa build/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/web/$folder_name
-          
+            echo "SSH_USERNAME: ${{ secrets.SSH_USERNAME }}"
+            echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
+            echo "SSH_PORT: ${{ secrets.SSH_PORT }}"
+            timestamp=$(date +"%Y%m%d%H%M%S")
+            folder_name="deploy_$timestamp"
+            ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "mkdir ~/web/$folder_name"
+            scp -r -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa build/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/web/$folder_name
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        
