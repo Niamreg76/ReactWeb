@@ -11,3 +11,5 @@ Une fois que le conteneur est crée. Cliquer sur le nom du conteneur on pourra v
 2023-12-06 11:54:39   On Your Network:  http://172.17.0.2:3000/ReactWeb
 
 Il suffit ensuite de juste cliquer sur l'un des liens pour afficher le front.
+
+Le site est également diponible ici : https://niamreg76.github.io/ReactWeb/
