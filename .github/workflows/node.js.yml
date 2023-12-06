@@ -35,3 +35,17 @@ jobs:
           npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - name: Deploy wiht SSH
+        run: |
+          timestamp=$(date +"%Y%m%d%H%M%S")
+          folder_name="deploy_$timestamp"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "mkdir ~/web/$folder_name"
+          scp -r -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa build/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/web/$folder_name
+          
