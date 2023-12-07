@@ -44,7 +44,7 @@ jobs:
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - name: Deploy to SSH Server
         run: |
-          timestamp=$(date +"%Y%m%d%H%M%S")
+          timestamp=$(date +"%Y-%m-%d_%H%M")
           folder_name="deploy_$timestamp"
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "mkdir ~/web/$folder_name"
           scp -r -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa build/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/web/$folder_name
